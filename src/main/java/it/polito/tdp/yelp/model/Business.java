@@ -1,6 +1,6 @@
 package it.polito.tdp.yelp.model;
 
-public class Business {
+public class Business implements Comparable<Business>{
 	private String businessId;
 	private String fullAddress;
 	private String active;
@@ -13,6 +13,7 @@ public class Business {
 	private double longitude;
 	private String state;
 	private double stars;
+	private double massimo;
 	
 	
 	public Business(String businessId, String fullAddress, String active, String categories, String city, int reviewCount,
@@ -104,6 +105,15 @@ public class Business {
 	public void setStars(double stars) {
 		this.stars = stars;
 	}
+	
+
+	public double getMassimo() {
+		return massimo;
+	}
+
+	public void setMassimo(double massimo) {
+		this.massimo = massimo;
+	}
 
 	@Override
 	public int hashCode() {
@@ -129,6 +139,18 @@ public class Business {
 			return false;
 		return true;
 	}
+
+	@Override
+	public int compareTo(Business o) {
+		return Double.compare(o.massimo, this.massimo);
+	}
+
+	@Override
+	public String toString() {
+		return  businessName;
+	}
+	
+	
 
 	
 }

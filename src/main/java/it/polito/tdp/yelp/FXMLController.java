@@ -5,8 +5,10 @@
 package it.polito.tdp.yelp;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.yelp.model.Business;
 import it.polito.tdp.yelp.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,16 +37,16 @@ public class FXMLController {
     private Button btnPercorso; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbCitta"
-    private ComboBox<?> cmbCitta; // Value injected by FXMLLoader
+    private ComboBox<String> cmbCitta; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtX"
     private TextField txtX; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbAnno"
-    private ComboBox<?> cmbAnno; // Value injected by FXMLLoader
+    private ComboBox<Integer> cmbAnno; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbLocale"
-    private ComboBox<?> cmbLocale; // Value injected by FXMLLoader
+    private ComboBox<Business> cmbLocale; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
@@ -52,15 +54,40 @@ public class FXMLController {
     @FXML
     void doCalcolaPercorso(ActionEvent event) {
     	
+    	List<Business> stampa= this.model.cercaPercorso(cmbLocale.getValue(), this.model.getBest(), Double.parseDouble(txtX.getText()));
+    	
+    	txtResult.clear();
+    	String string="Percorso minimo: \n";
+    	
+    	for(Business b: stampa) {
+    		string+= b.getBusinessName()+"\n";
+    	}
+    	
+    	txtResult.appendText(string);
+    	txtResult.appendText("\nHO FINITO!");
+    	
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	
+    	String s= model.creaGrafo(cmbCitta.getValue(), cmbAnno.getValue());
+    	
+    	txtResult.clear();
+    	txtResult.appendText(s);
+    	
+    	cmbLocale.getItems().clear();
+    	cmbLocale.getItems().addAll(this.model.getVertici());
 
     }
 
     @FXML
     void doLocaleMigliore(ActionEvent event) {
+    	
+    	String s= model.migliore();
+    	
+    	txtResult.clear();
+    	txtResult.appendText(s);
 
     }
 
@@ -78,5 +105,13 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	
+    	this.cmbCitta.getItems().clear();
+    	this.cmbCitta.getItems().addAll(this.model.getAllCitta());
+    	this.cmbAnno.getItems().clear();
+    	
+    	for(int i= 2005; i<=2013; i++) {
+    		this.cmbAnno.getItems().add(i);
+    	}
     }
 }
